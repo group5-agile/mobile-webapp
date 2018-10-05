@@ -11,16 +11,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
+<<<<<<< HEAD
 import org.springframework.validation.Validator;
 import org.springframework.web.bind.annotation.DeleteMapping;
+=======
+>>>>>>> parent of 2d9b67e... Mạnh - Update
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,7 +32,8 @@ import poly.agile.webapp.model.Brand;
 import poly.agile.webapp.service.brand.BrandService;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/admin/brands")
+@SessionAttributes(value = { "brand" })
 public class BrandController {
 
 	@Autowired
@@ -38,29 +42,34 @@ public class BrandController {
 	@Autowired
     protected Validator validator;
 
-	@GetMapping("/brands")
+	@GetMapping
 	public String all(Model model) {
 		model.addAttribute("brands", service.findAll());
 		return "admin/brands/list";
 	}
 
-	@GetMapping("/brand")
-	public String add() {
+	@GetMapping("/add")
+	public String addBrand() {
 		return "admin/brands/add";
 	}
 
-	@GetMapping("/brand/{id}")
-	public String edit(@PathVariable("id") Integer id, Model model) {
+	@GetMapping("/edit/{id}")
+	public String editBrand(@PathVariable("id") Integer id, Model model) {
 		model.addAttribute("brand", service.findById(id));
 		return "admin/brands/edit";
 	}
 
+<<<<<<< HEAD
 	@PostMapping("/brand")
 	public String save(@ModelAttribute("brand") Brand brand, @RequestParam("image") MultipartFile image,
 			Errors errors, SessionStatus status) {
 		
 		validator.validate(brand, errors);
 		
+=======
+	@PostMapping("/save")
+	public String saveBrand(@Valid @ModelAttribute("brand") Brand brand, Errors errors, SessionStatus status) {
+>>>>>>> parent of 2d9b67e... Mạnh - Update
 		if (errors.hasErrors()) {
 			return "admin/brands/add";
 		}
@@ -79,20 +88,29 @@ public class BrandController {
 			service.create(brand);
 		} catch (DuplicateFieldException e) {
 			e.printStackTrace();
+<<<<<<< HEAD
 			errors.rejectValue("name", "brand.name", "Trùng tên thương hiệu!");
 			return "admin/brands/add";
 		}
 
+=======
+		} 
+>>>>>>> parent of 2d9b67e... Mạnh - Update
 		status.setComplete();
 		return "redirect:/admin/brands";
 	}
 
+<<<<<<< HEAD
 	@PutMapping("/brand/{id}")
 	public String replace(@ModelAttribute("brand") Brand brand, @RequestParam("image") MultipartFile image,
 			Errors errors, SessionStatus status) {
 		
 		validator.validate(brand, errors);
 		
+=======
+	@PostMapping("/update")
+	public String replaceBrand(@Valid @ModelAttribute("brand") Brand brand, Errors errors, SessionStatus status) {
+>>>>>>> parent of 2d9b67e... Mạnh - Update
 		if (errors.hasErrors()) {
 			return "admin/brands/edit";
 		}
@@ -118,8 +136,8 @@ public class BrandController {
 		return "redirect:/admin/brands";
 	}
 
-	@DeleteMapping("/brand/{id}")
-	public @ResponseBody boolean delete(@PathVariable Integer id) {
+	@PostMapping("/remove/{id}")
+	public @ResponseBody boolean removeBrand(@PathVariable Integer id) {
 		return service.remove(service.findById(id));
 	}
 
@@ -127,7 +145,7 @@ public class BrandController {
 	public Brand getBrand() {
 		return new Brand();
 	}
-
+	
 	@ModelAttribute("adminProductPage")
 	public boolean active() {
 		return true;

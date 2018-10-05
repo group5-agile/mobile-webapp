@@ -35,7 +35,7 @@ import poly.agile.webapp.service.specification.SpecificationSerivce;
 import poly.agile.webapp.util.StringUtils;
 
 @Controller
-@RequestMapping("/admin/product")
+@RequestMapping(value = { "/admin/products/create" })
 @SessionAttributes(names = { "brands", "specifications", "product" })
 public class ProductCreatingController {
 

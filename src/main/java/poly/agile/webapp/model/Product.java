@@ -60,6 +60,7 @@ public class Product implements Serializable {
 	@Column(name = "SHORT_DESCRIPTION", length = 255)
 	private String shortDescription;
 
+<<<<<<< HEAD
 	@Length(max = 255, message = "Đường dẫn quá dài!")
 	@Column(name = "THUMBNAIL", length = 255)
 	private String thumbnail;
@@ -70,6 +71,8 @@ public class Product implements Serializable {
 	@Column(name = "VIEW", insertable = false)
 	private Integer view;
 
+=======
+>>>>>>> parent of 2d9b67e... Mạnh - Update
 	@Length(min = 0, max = 255, message = "Bảo hành phải nhỏ hơn 46 ký tự")
 	@Column(name = "WARRANTY", length = 45)
 	private String warranty;

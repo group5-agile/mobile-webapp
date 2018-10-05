@@ -12,15 +12,15 @@ import poly.agile.webapp.dto.ProductDTO;
 import poly.agile.webapp.service.product.ProductService;
 import poly.agile.webapp.util.pagination.Pagination;
 
-@Controller
-@RequestMapping("/admin")
+@Controller("adminProductListController")
+@RequestMapping("/admin/products")
 public class ProductListController {
 
 	@Autowired
 	private ProductService productService;
 
-	@GetMapping("/products")
-	public String all(Model model, @RequestParam(value = "page", defaultValue = "1") Integer page) {
+	@GetMapping
+	public String list(Model model, @RequestParam(value = "page", defaultValue = "1") Integer page) {
 		Page<ProductDTO> pages = productService.getPages(page);
 		Pagination pagination = new Pagination(pages.getTotalPages(), 10, page);
 		model.addAttribute("products", pages.getContent());
