@@ -7,13 +7,8 @@
 <body>
 	<div layout:fragment="content">
 		<div class="container pt-5 pb-5">
-<<<<<<< HEAD:target/classes/templates/admin/products/add.html
 			<form th:action="@{/admin/product}" th:object="${product}"
 				th:method="POST" enctype="multipart/form-data">
-=======
-			<form th:action="@{/admin/products/create}" th:object="${product}"
-				th:method="post">
->>>>>>> parent of 2d9b67e... Mạnh - Update:target/classes/templates/admin/products/create.html
 				<div class="form-row">
 					<div class="form-group col-md-9">
 						<label for="inputProductName">Tên sản phẩm</label> <input
@@ -73,7 +68,7 @@
 					<div th:if="${#fields.hasErrors('shortDescription')}"
 						th:errors="*{shortDescription}" class="invalid-feedback">Message</div>
 				</div>
-				
+
 				<div class="form-group">
 					<label for="image">Hình đại diện</label>
 					<div>
@@ -182,7 +177,7 @@
 		<script>
 			$(document).ready(function() {
 				$("#clear-form-btn").click(function() {
-					$.get("/admin/products/create/clearForm", function(data) {
+					$.get("/admin/product/clearForm", function(data) {
 						if (data)
 							location.reload();
 					});

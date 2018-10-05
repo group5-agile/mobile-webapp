@@ -122,13 +122,10 @@ public class ProductServiceImpl implements ProductService {
 		keyword = "%" + keyword + "%";
 		return productRepository.findProduct(keyword, PageRequest.of(page - 1, 8));
 	}
-<<<<<<< HEAD
 
 	@Override
 	public void incrementViewCount(Integer id) {
 		productRepository.incrementViewCount(id);
 	}
 
-=======
->>>>>>> parent of 2d9b67e... Mạnh - Update
 }
