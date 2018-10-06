@@ -18,7 +18,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 <<<<<<< HEAD
+<<<<<<< HEAD
 import org.springframework.web.bind.annotation.PostMapping;
+=======
+>>>>>>> parent of 9fd6050... revert
 =======
 >>>>>>> parent of 9fd6050... revert
 import org.springframework.web.bind.annotation.PutMapping;
@@ -43,8 +46,11 @@ import poly.agile.webapp.util.StringUtils;
 @Controller
 @RequestMapping("/admin/product/{id}")
 <<<<<<< HEAD
+<<<<<<< HEAD
 @SessionAttributes(names = { "brands", "specifications" })
 =======
+=======
+>>>>>>> parent of 9fd6050... revert
 @SessionAttributes(names = { "brands", "specifications", "product" })
 >>>>>>> parent of 9fd6050... revert
 public class ProductUpdatingController {
@@ -64,9 +70,12 @@ public class ProductUpdatingController {
 	@GetMapping
 	public String form(@PathVariable("id") Integer id, Model model) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 		Product product = productService.findById(id);
 		model.addAttribute("product", product);
 =======
+=======
+>>>>>>> parent of 9fd6050... revert
 		model.addAttribute("product", productService.findById(id));
 >>>>>>> parent of 9fd6050... revert
 		return "admin/products/edit";
@@ -79,7 +88,11 @@ public class ProductUpdatingController {
 	}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	@PostMapping(params = "addSpecDetailRow")
+=======
+	@PutMapping(params = "addSpecDetailRow")
+>>>>>>> parent of 9fd6050... revert
 =======
 	@PutMapping(params = "addSpecDetailRow")
 >>>>>>> parent of 9fd6050... revert
