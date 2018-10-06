@@ -36,7 +36,11 @@ import poly.agile.webapp.util.StringUtils;
 
 @Controller
 @RequestMapping("/admin/product")
+<<<<<<< HEAD
 @SessionAttributes(names = { "brands", "specifications"})
+=======
+@SessionAttributes(names = { "brands", "specifications", "product" })
+>>>>>>> parent of 9fd6050... revert
 public class ProductCreatingController {
 
 	@Autowired

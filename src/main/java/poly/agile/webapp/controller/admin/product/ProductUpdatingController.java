@@ -17,7 +17,10 @@ import org.springframework.validation.Validator;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+<<<<<<< HEAD
 import org.springframework.web.bind.annotation.PostMapping;
+=======
+>>>>>>> parent of 9fd6050... revert
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -39,7 +42,11 @@ import poly.agile.webapp.util.StringUtils;
 
 @Controller
 @RequestMapping("/admin/product/{id}")
+<<<<<<< HEAD
 @SessionAttributes(names = { "brands", "specifications" })
+=======
+@SessionAttributes(names = { "brands", "specifications", "product" })
+>>>>>>> parent of 9fd6050... revert
 public class ProductUpdatingController {
 
 	@Autowired
@@ -56,8 +63,12 @@ public class ProductUpdatingController {
 
 	@GetMapping
 	public String form(@PathVariable("id") Integer id, Model model) {
+<<<<<<< HEAD
 		Product product = productService.findById(id);
 		model.addAttribute("product", product);
+=======
+		model.addAttribute("product", productService.findById(id));
+>>>>>>> parent of 9fd6050... revert
 		return "admin/products/edit";
 	}
 
@@ -67,7 +78,11 @@ public class ProductUpdatingController {
 		return "admin/products/edit";
 	}
 
+<<<<<<< HEAD
 	@PostMapping(params = "addSpecDetailRow")
+=======
+	@PutMapping(params = "addSpecDetailRow")
+>>>>>>> parent of 9fd6050... revert
 	public String addSpecDetailRow(@ModelAttribute("product") Product product,
 			@RequestParam("addSpecDetailRow") Integer rowIndex) {
 		ProductSpec productSpec = product.getProductSpecs().get(rowIndex.intValue());

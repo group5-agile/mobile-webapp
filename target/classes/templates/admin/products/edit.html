@@ -8,7 +8,6 @@
 
 	<div layout:fragment="content">
 		<div class="container pt-5 pb-5">
-<<<<<<< HEAD:target/classes/templates/admin/products/edit.html
 			<form th:action="@{/admin/product/__${product.id}__}"
 				th:object="${product}" th:method="PUT" enctype="multipart/form-data">
 				<div class="form-row">
@@ -39,7 +38,10 @@
 				</div>
 				<div class="form-row">
 					<div class="form-group col-md-4">
+<<<<<<< HEAD
 <<<<<<< HEAD:target/classes/templates/admin/products/edit.html
+=======
+>>>>>>> parent of 9fd6050... revert
 						<label for="inputPrice">Giá</label> <input id="inputPrice"
 							type="number" min="0" max="1000000000" class="form-control"
 							placeholder="Đơn giá" th:field="*{price}"
@@ -168,7 +170,10 @@
 										<tbody>
 											<tr th:each="psd, psdStat : ${prodSpec.productSpecDetails}">
 												<td th:text="${psdStat.count}"></td>
+<<<<<<< HEAD
 <<<<<<< HEAD:target/classes/templates/admin/products/edit.html
+=======
+>>>>>>> parent of 9fd6050... revert
 												<td><input class="form-control form-control-sm"
 													th:field="*{productSpecs[__${prodSpecStat.index}__].productSpecDetails[__${psdStat.index}__].name}"
 													th:classappend="${#fields.hasErrors('productSpecs[__${prodSpecStat.index}__].productSpecDetails[__${psdStat.index}__].name')}? 'is-invalid'">
@@ -183,6 +188,7 @@
 														th:if="${#fields.hasErrors('productSpecs[__${prodSpecStat.index}__].productSpecDetails[__${psdStat.index}__].value')}"
 														th:errors="*{productSpecs[__${prodSpecStat.index}__].productSpecDetails[__${psdStat.index}__].value}"
 														class="invalid-feedback">Message</div></td>
+<<<<<<< HEAD
 =======
 												<td>
 													<input class="form-control form-control-sm"
@@ -193,6 +199,8 @@
 														th:field="*{productSpecs[__${prodSpecStat.index}__].productSpecDetails[__${psdStat.index}__].value}">
 												</td>
 >>>>>>> parent of 784e998... Mạnh - update validate product:target/classes/templates/admin/products/update.html
+=======
+>>>>>>> parent of 9fd6050... revert
 												<td>
 													<button name="removeSpecDetailRow"
 														th:value="|${prodSpecStat.index},${psdStat.index}|"
@@ -211,15 +219,17 @@
 						</tr>
 					</tbody>
 				</table>
-<<<<<<< HEAD:target/classes/templates/admin/products/edit.html
 				<button name="update" class="btn btn-warning"
 					th:utext="|#{icon.edit} Sửa sản phẩm|">Sửa</button>
+<<<<<<< HEAD
 =======
 				<button type="submit" name="update" class="btn btn-warning">
 					<i class="fas fa-pen"></i>
 					Sửa
 				</button>
 >>>>>>> parent of 784e998... Mạnh - update validate product:target/classes/templates/admin/products/update.html
+=======
+>>>>>>> parent of 9fd6050... revert
 			</form>
 		</div>
 	</div>
