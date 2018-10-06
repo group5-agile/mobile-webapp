@@ -13,7 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.Valid;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -45,7 +44,6 @@ public class ProductSpec implements Serializable {
 	@JoinColumn(name = "SPECIFICATION_ID")
 	private Specification specification;
 
-	@Valid
 	@OneToMany(mappedBy = "productSpec", cascade = CascadeType.ALL, orphanRemoval=true)
 	private List<ProductSpecDetail> productSpecDetails;
 

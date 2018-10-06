@@ -14,7 +14,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+<<<<<<< HEAD
 import javax.validation.Valid;
+=======
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+>>>>>>> parent of 784e998... Mạnh - update validate product
 
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
@@ -80,7 +86,14 @@ public class Product implements Serializable {
 	@Column(name = "CREATED_TIME", insertable = false, updatable = false)
 	private Date createdTime;
 
+<<<<<<< HEAD
 	@Valid
+=======
+	@ManyToOne(cascade = CascadeType.MERGE)
+	@JoinColumn(name = "BRAND_ID")
+	private Brand brand;
+
+>>>>>>> parent of 784e998... Mạnh - update validate product
 	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ProductSpec> productSpecs;
 
