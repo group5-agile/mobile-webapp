@@ -17,6 +17,7 @@ import org.springframework.validation.Validator;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,7 +39,7 @@ import poly.agile.webapp.util.StringUtils;
 
 @Controller
 @RequestMapping("/admin/product/{id}")
-@SessionAttributes(names = { "brands", "specifications", "product" })
+@SessionAttributes(names = { "brands", "specifications" })
 public class ProductUpdatingController {
 
 	@Autowired
@@ -55,7 +56,8 @@ public class ProductUpdatingController {
 
 	@GetMapping
 	public String form(@PathVariable("id") Integer id, Model model) {
-		model.addAttribute("product", productService.findById(id));
+		Product product = productService.findById(id);
+		model.addAttribute("product", product);
 		return "admin/products/edit";
 	}
 
@@ -65,7 +67,7 @@ public class ProductUpdatingController {
 		return "admin/products/edit";
 	}
 
-	@PutMapping(params = "addSpecDetailRow")
+	@PostMapping(params = "addSpecDetailRow")
 	public String addSpecDetailRow(@ModelAttribute("product") Product product,
 			@RequestParam("addSpecDetailRow") Integer rowIndex) {
 		ProductSpec productSpec = product.getProductSpecs().get(rowIndex.intValue());
@@ -101,8 +103,20 @@ public class ProductUpdatingController {
 	}
 
 	@PutMapping(params = "update")
-	public String replaceProduct(@ModelAttribute("product") Product product, @RequestPart("image") MultipartFile image,
+	public String update(@ModelAttribute("product") Product product, @RequestPart("image") MultipartFile image,
 			Errors errors, SessionStatus status) {
+
+		boolean error = false;
+		if (product.getPrice() == null) {
+			errors.rejectValue("price", "product.price", "Vui lòng nhập vào giá sản phẩm!");
+			error = true;
+		}
+		if (product.getQtyInStock() == null) {
+			errors.rejectValue("price", "product.price", "Vui lòng nhập vào giá sản phẩm!");
+			error = true;
+		}
+		if (error)
+			return "admin/products/edit";
 
 		validator.validate(product, errors);
 

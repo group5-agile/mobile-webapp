@@ -36,7 +36,7 @@ import poly.agile.webapp.util.StringUtils;
 
 @Controller
 @RequestMapping("/admin/product")
-@SessionAttributes(names = { "brands", "specifications", "product" })
+@SessionAttributes(names = { "brands", "specifications"})
 public class ProductCreatingController {
 
 	@Autowired
@@ -107,10 +107,22 @@ public class ProductCreatingController {
 	@PostMapping(params = "create")
 	public String create(@ModelAttribute("product") Product product, @RequestParam("image") MultipartFile image,
 			Errors errors, SessionStatus status) {
+		
+		boolean error = false;
+		if(product.getPrice()==null) {
+			errors.rejectValue("price", "product.price", "Vui lòng nhập vào giá sản phẩm!");
+			error = true;
+		}
+		if(product.getQtyInStock()==null) {
+			errors.rejectValue("qtyInStock", "product.qtyInStock", "Vui lòng nhập vào số lượng sản phẩm!");
+			error = true;
+		}
+		if(error)
+			return "admin/products/add";
 
 		validator.validate(product, errors);
 
-		if (errors.hasFieldErrors()) {
+		if (errors.hasErrors()) {
 			return "admin/products/add";
 		}
 

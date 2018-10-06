@@ -17,15 +17,17 @@ import javax.validation.Valid;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 @Entity
 @Table(name = "product_spec")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-@ToString(exclude = { "productSpecDetails" })
+@ToString(exclude = {"product", "productSpecDetails" })
 public class ProductSpec implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -35,7 +37,7 @@ public class ProductSpec implements Serializable {
 	private Integer id;
 
 	@JsonIgnore
-	@ManyToOne(cascade=CascadeType.PERSIST)
+	@ManyToOne(cascade= CascadeType.PERSIST)
 	@JoinColumn(name = "PRODUCT_ID")
 	private Product product;
 
