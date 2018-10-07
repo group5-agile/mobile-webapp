@@ -37,8 +37,8 @@ import poly.agile.webapp.service.specification.SpecificationSerivce;
 import poly.agile.webapp.util.StringUtils;
 
 @Controller
-@RequestMapping("/admin/product")
-@SessionAttributes(names = { "brands", "specifications" })
+@RequestMapping("/admin/product/{id}")
+@SessionAttributes(names = { "brands", "specifications"})
 public class ProductUpdatingController {
 
 	@Autowired
@@ -50,37 +50,37 @@ public class ProductUpdatingController {
 	@Autowired
 	private ProductService productService;
 
-	@GetMapping(value = "/{id}")
+	@GetMapping
 	public String form(@PathVariable("id") Integer id, Model model) {
 		Product product = productService.findById(id);
 		model.addAttribute("product", product);
 		return "admin/product/edit";
 	}
 
-	@PutMapping(value = "/{id}", params = "addSpecRow")
+	@PutMapping(params = "addSpecRow")
 	public String addSpecRow(@ModelAttribute("product") Product product, @RequestParam("addSpecRow") Integer rowIndex) {
 		addProductSpecificationRow(product);
 		return "admin/product/edit";
 	}
 
-	@PutMapping(value = "/{id}", params = "addSpecDetailRow")
+	@PutMapping(params = "addSpecDetailRow")
 	public String addSpecDetailRow(@ModelAttribute("product") Product product,
 			@RequestParam("addSpecDetailRow") Integer rowIndex) {
 		ProductSpec productSpec = product.getProductSpecs().get(rowIndex.intValue());
-		ProductSpecDetail detail = new ProductSpecDetail();
-		detail.setProductSpec(productSpec);
-		productSpec.getProductSpecDetails().add(detail);
+		ProductSpecDetail productSpecDetail = new ProductSpecDetail();
+		productSpecDetail.setProductSpec(productSpec);
+		productSpec.getProductSpecDetails().add(productSpecDetail);
 		return "admin/product/edit";
 	}
 
-	@PutMapping(value = "/{id}", params = "removeSpecRow")
+	@PutMapping(params = "removeSpecRow")
 	public String removeSpecRow(@ModelAttribute("product") Product product,
 			@RequestParam("removeSpecRow") Integer rowIndex) {
 		product.getProductSpecs().remove(rowIndex.intValue());
 		return "admin/product/edit";
 	}
 
-	@PutMapping(value = "/{id}", params = "removeSpecDetailRow")
+	@PutMapping(params = "removeSpecDetailRow")
 	public String removeSpecDetailRow(@ModelAttribute("product") Product product,
 			@RequestParam("removeSpecDetailRow") String values) {
 		String[] rows = values.split(",");
@@ -98,22 +98,23 @@ public class ProductUpdatingController {
 		return "admin/product/edit";
 	}
 
-	@PutMapping(value = "/{id}", params = "update")
+	@PutMapping(params = "update")
 	public String update(@Valid @ModelAttribute("product") Product product, Errors errors, SessionStatus status) {
 
 		if (errors.hasErrors()) {
 			return "admin/product/edit";
 		}
 		
-		Product oldProduct = productService.findById(product.getId());
-
 		List<ProductSpec> productSpecs = product.getProductSpecs();
-		if (productSpecs == null) {
+		
+		if(productSpecs==null) {
 			product.setProductSpecs(new ArrayList<>());
-		} else {
-			productSpecs.forEach(productSpec -> {
-				productSpec.getProductSpecDetails().forEach(specDetail -> {
-					specDetail.setProductSpec(productSpec);
+		}else {
+			productSpecs.forEach(spec->{
+				spec.getProductSpecDetails().forEach(specDetail -> {
+					if(specDetail.getProductSpec()==null) {
+						specDetail.setProductSpec(spec);
+					}
 				});
 			});
 		}
@@ -139,9 +140,6 @@ public class ProductUpdatingController {
 				e.printStackTrace();
 			}
 		}
-		
-		if(product.getThumbnail()==null)
-			product.setThumbnail(oldProduct.getThumbnail());
 
 		try {
 			productService.update(product);
@@ -167,18 +165,22 @@ public class ProductUpdatingController {
 
 	private void addProductSpecificationRow(Product product) {
 		List<ProductSpec> productSpecs = product.getProductSpecs();
+		List<ProductSpecDetail> productSpecDetails = new ArrayList<>();
+		
 		if (productSpecs == null) {
 			productSpecs = new ArrayList<>();
 		}
+		
 		ProductSpec productSpec = new ProductSpec();
-		ProductSpecDetail detail = new ProductSpecDetail();
-		detail.setProductSpec(productSpec);
-		List<ProductSpecDetail> details = new ArrayList<>();
-		details.add(detail);
-		productSpec.setProductSpecDetails(details);
+		
+		ProductSpecDetail productSpecDetail = new ProductSpecDetail();
+		productSpecDetail.setProductSpec(productSpec);
+		productSpecDetails.add(productSpecDetail);
+		
 		productSpec.setProduct(product);
+		productSpec.setProductSpecDetails(productSpecDetails);
 		productSpecs.add(productSpec);
-
+		
 		product.setProductSpecs(productSpecs);
 	}
 

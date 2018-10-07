@@ -68,8 +68,14 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean remove(User object) {
-		return false;
+	public boolean remove(User u) {
+		try {
+			userRepository.delete(u);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	@Override

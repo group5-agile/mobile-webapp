@@ -1,7 +1,16 @@
 package poly.agile.webapp.model;
 
 import java.io.Serializable;
-import javax.persistence.*;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -34,7 +43,7 @@ public class ProductSpecDetail implements Serializable {
 	private String value;
 
 	@JsonIgnore
-	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "PROD_SPEC_ID")
 	private ProductSpec productSpec;
 

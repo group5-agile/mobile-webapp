@@ -86,7 +86,7 @@ public class Product implements Serializable {
 	private Date createdTime;
 
 	@Valid
-	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "product", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ProductSpec> productSpecs;
 
 	@JsonIgnore
