@@ -5,8 +5,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import poly.agile.webapp.model.User;
 import poly.agile.webapp.service.user.UserService;
 
 @Controller
@@ -19,7 +23,23 @@ public class UserController {
 	@GetMapping("/users")
 	public String all(Model model) {
 		model.addAttribute("users", userService.findAll());
-		return "admin/users/list";
+		return "admin/user/list";
+	}
+
+	@GetMapping("/user/{id}")
+	public User get(@PathVariable("id") Integer id) {
+		return userService.findUserById(id);
+	}
+
+	@PostMapping(value = "/user/{id}", params = "enabled")
+	public String setEnabled(@PathVariable("id") Integer userId, @RequestParam("enabled") Boolean enabled) {
+		try {
+			userService.setEnabledUser(userId, enabled);
+			return "redirect:/admin/users";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "admin/user/list";
+		}
 	}
 
 	@ModelAttribute("adminUserPage")

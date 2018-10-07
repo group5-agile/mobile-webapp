@@ -9,30 +9,23 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.validation.Validator;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-<<<<<<< HEAD
-<<<<<<< HEAD
-import org.springframework.web.bind.annotation.PostMapping;
-=======
->>>>>>> parent of 9fd6050... revert
-=======
->>>>>>> parent of 9fd6050... revert
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
-import poly.agile.webapp.exception.DuplicateFieldException;
+import poly.agile.webapp.exception.DuplicateProductNameException;
 import poly.agile.webapp.model.Brand;
 import poly.agile.webapp.model.Product;
 import poly.agile.webapp.model.ProductSpec;
@@ -44,15 +37,8 @@ import poly.agile.webapp.service.specification.SpecificationSerivce;
 import poly.agile.webapp.util.StringUtils;
 
 @Controller
-@RequestMapping("/admin/product/{id}")
-<<<<<<< HEAD
-<<<<<<< HEAD
+@RequestMapping("/admin/product")
 @SessionAttributes(names = { "brands", "specifications" })
-=======
-=======
->>>>>>> parent of 9fd6050... revert
-@SessionAttributes(names = { "brands", "specifications", "product" })
->>>>>>> parent of 9fd6050... revert
 public class ProductUpdatingController {
 
 	@Autowired
@@ -64,55 +50,37 @@ public class ProductUpdatingController {
 	@Autowired
 	private ProductService productService;
 
-	@Autowired
-	private Validator validator;
-
-	@GetMapping
+	@GetMapping(value = "/{id}")
 	public String form(@PathVariable("id") Integer id, Model model) {
-<<<<<<< HEAD
-<<<<<<< HEAD
 		Product product = productService.findById(id);
 		model.addAttribute("product", product);
-=======
-=======
->>>>>>> parent of 9fd6050... revert
-		model.addAttribute("product", productService.findById(id));
->>>>>>> parent of 9fd6050... revert
-		return "admin/products/edit";
+		return "admin/product/edit";
 	}
 
-	@PutMapping(params = "addSpecRow")
+	@PutMapping(value = "/{id}", params = "addSpecRow")
 	public String addSpecRow(@ModelAttribute("product") Product product, @RequestParam("addSpecRow") Integer rowIndex) {
 		addProductSpecificationRow(product);
-		return "admin/products/edit";
+		return "admin/product/edit";
 	}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-	@PostMapping(params = "addSpecDetailRow")
-=======
-	@PutMapping(params = "addSpecDetailRow")
->>>>>>> parent of 9fd6050... revert
-=======
-	@PutMapping(params = "addSpecDetailRow")
->>>>>>> parent of 9fd6050... revert
+	@PutMapping(value = "/{id}", params = "addSpecDetailRow")
 	public String addSpecDetailRow(@ModelAttribute("product") Product product,
 			@RequestParam("addSpecDetailRow") Integer rowIndex) {
 		ProductSpec productSpec = product.getProductSpecs().get(rowIndex.intValue());
 		ProductSpecDetail detail = new ProductSpecDetail();
 		detail.setProductSpec(productSpec);
 		productSpec.getProductSpecDetails().add(detail);
-		return "admin/products/edit";
+		return "admin/product/edit";
 	}
 
-	@PutMapping(params = "removeSpecRow")
+	@PutMapping(value = "/{id}", params = "removeSpecRow")
 	public String removeSpecRow(@ModelAttribute("product") Product product,
 			@RequestParam("removeSpecRow") Integer rowIndex) {
 		product.getProductSpecs().remove(rowIndex.intValue());
-		return "admin/products/edit";
+		return "admin/product/edit";
 	}
 
-	@PutMapping(params = "removeSpecDetailRow")
+	@PutMapping(value = "/{id}", params = "removeSpecDetailRow")
 	public String removeSpecDetailRow(@ModelAttribute("product") Product product,
 			@RequestParam("removeSpecDetailRow") String values) {
 		String[] rows = values.split(",");
@@ -127,32 +95,32 @@ public class ProductUpdatingController {
 		if (productSpec.getProductSpecDetails().isEmpty())
 			product.getProductSpecs().remove(specIndex);
 
-		return "admin/products/edit";
+		return "admin/product/edit";
 	}
 
-	@PutMapping(params = "update")
-	public String update(@ModelAttribute("product") Product product, @RequestPart("image") MultipartFile image,
-			Errors errors, SessionStatus status) {
-
-		boolean error = false;
-		if (product.getPrice() == null) {
-			errors.rejectValue("price", "product.price", "Vui lòng nhập vào giá sản phẩm!");
-			error = true;
-		}
-		if (product.getQtyInStock() == null) {
-			errors.rejectValue("price", "product.price", "Vui lòng nhập vào giá sản phẩm!");
-			error = true;
-		}
-		if (error)
-			return "admin/products/edit";
-
-		validator.validate(product, errors);
+	@PutMapping(value = "/{id}", params = "update")
+	public String update(@Valid @ModelAttribute("product") Product product, Errors errors, SessionStatus status) {
 
 		if (errors.hasErrors()) {
-			return "admin/products/edit";
+			return "admin/product/edit";
+		}
+		
+		Product oldProduct = productService.findById(product.getId());
+
+		List<ProductSpec> productSpecs = product.getProductSpecs();
+		if (productSpecs == null) {
+			product.setProductSpecs(new ArrayList<>());
+		} else {
+			productSpecs.forEach(productSpec -> {
+				productSpec.getProductSpecDetails().forEach(specDetail -> {
+					specDetail.setProductSpec(productSpec);
+				});
+			});
 		}
 
-		if (!image.isEmpty()) {
+		MultipartFile image = product.getImageFile();
+
+		if (image != null) {
 			try (InputStream in = image.getInputStream()) {
 
 				String brandFolder = product.getBrand().getName().toLowerCase().replaceAll("\\s+", "");
@@ -171,14 +139,17 @@ public class ProductUpdatingController {
 				e.printStackTrace();
 			}
 		}
+		
+		if(product.getThumbnail()==null)
+			product.setThumbnail(oldProduct.getThumbnail());
 
 		try {
 			productService.update(product);
 			status.setComplete();
-		} catch (DuplicateFieldException e) {
+		} catch (DuplicateProductNameException e) {
 			e.printStackTrace();
 			errors.rejectValue("name", "product.name", "Trùng tên sản phẩm!");
-			return "admin/products/edit";
+			return "admin/product/edit";
 		}
 
 		return "redirect:/admin/products";

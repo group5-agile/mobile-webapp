@@ -7,12 +7,16 @@ import javax.validation.constraints.NotBlank;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Table(name = "product_spec_detail")
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode(exclude = "productSpec")
+@ToString(exclude = "productSpec")
 public class ProductSpecDetail implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -21,16 +25,16 @@ public class ProductSpecDetail implements Serializable {
 	@Column(name = "PROD_SPEC_DETAIL_ID")
 	private Integer id;
 
-	@NotBlank(message="Không được để trống tên chi tiết thông số kỹ thuật!")
+	@NotBlank(message = "Không được để trống tên chi tiết thông số kỹ thuật!")
 	@Column(name = "PROD_SPEC_NAME")
 	private String name;
 
-	@NotBlank(message="Không được để trống giá trị chi tiết thông số kỹ thuật!")
+	@NotBlank(message = "Không được để trống giá trị chi tiết thông số kỹ thuật!")
 	@Column(name = "PROD_SPEC_VALUE")
 	private String value;
 
 	@JsonIgnore
-	@ManyToOne(cascade = CascadeType.PERSIST)
+	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinColumn(name = "PROD_SPEC_ID")
 	private ProductSpec productSpec;
 

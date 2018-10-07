@@ -102,4 +102,9 @@ public class UserServiceImpl implements UserService {
 		userRepository.updateUser(username, fullname, address, birthdate, gender);
 	}
 
+	@Override
+	public void setEnabledUser(Integer userId, boolean enabled) {
+		userRepository.blockUser(userId, enabled);
+	}
+
 }
