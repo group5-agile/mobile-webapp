@@ -38,6 +38,9 @@ public class ProfileController {
 		if (result.hasErrors()) {
 			User user = userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
 			model.addAttribute("user", user);
+			result.getAllErrors().forEach(e->{
+				System.out.println(e.getDefaultMessage());
+			});
 			return "auth/profile";
 		}
 		
