@@ -5,6 +5,8 @@ import java.io.File;
 import javax.servlet.ServletContext;
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -21,10 +23,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
-import poly.agile.webapp.dto.BranDTO;
+import poly.agile.webapp.dto.BrandDTO;
 import poly.agile.webapp.exception.DuplicateBrandNameException;
 import poly.agile.webapp.model.Brand;
 import poly.agile.webapp.service.brand.BrandService;
+import poly.agile.webapp.util.StringUtils;
 import poly.agile.webapp.util.pagination.Pagination;
 
 @Controller
@@ -37,9 +40,22 @@ public class BrandController {
 	@Autowired
 	private ServletContext context;
 
+	static final Logger logger = LoggerFactory.getLogger(BrandController.class);
+
 	@GetMapping("/brands")
 	public String all(Model model, @RequestParam(value = "page", defaultValue = "1") Integer page) {
-		Page<BranDTO> pages = brandService.getPages(page, 5);
+		Page<BrandDTO> pages = brandService.getPages(page, 5);
+
+		Pagination pagination = new Pagination(pages.getTotalPages(), 5, page);
+		model.addAttribute("brands", pages.getContent());
+		model.addAttribute("pagination", pagination);
+		return "admin/product/brand/list";
+	}
+
+	@GetMapping(value = "/brands", params = "find")
+	public String all(Model model, @RequestParam(value = "page", defaultValue = "1") Integer page,
+			@RequestParam("find") String search) {
+		Page<BrandDTO> pages = brandService.getPages(search, page, 5);
 
 		Pagination pagination = new Pagination(pages.getTotalPages(), 5, page);
 		model.addAttribute("brands", pages.getContent());
@@ -67,18 +83,22 @@ public class BrandController {
 
 		MultipartFile image = brand.getImage();
 		if (image != null) {
-			try {
-				String parent = context.getRealPath("/images/brands/");
-				String filename = brand.getName() + ".png";
-				String path = parent + filename;
-				File file = new File(path);
-				image.transferTo(file);
-				brand.setLogo("/images/brands/" + brand.getName() + ".png");
-			} catch (Exception e) {
+			if (!image.isEmpty()) {
+				try {
+					String extension = StringUtils.getFileExtension(image.getOriginalFilename());
+					String filename = brand.getName() + extension;
+					String path = context.getRealPath("/images/brands/" + filename);
+					File file = new File(path);
+					image.transferTo(file);
+					brand.setLogo("/images/brands/" + filename);
+				} catch (Exception e) {
+				}
 			}
 		}
 
-		try {
+		try
+
+		{
 			brandService.create(brand);
 			status.setComplete();
 			return "redirect:/admin/product/brands";
@@ -97,17 +117,19 @@ public class BrandController {
 		}
 
 		MultipartFile image = brand.getImage();
-		if (image != null)
-			if (!image.isEmpty())
+		if (image != null) {
+			if (!image.isEmpty()) {
 				try {
-					String parent = context.getRealPath("/images/brands/");
-					String filename = brand.getName() + ".png";
-					String path = parent + filename;
+					String extension = StringUtils.getFileExtension(image.getOriginalFilename());
+					String filename = brand.getName() + extension;
+					String path = context.getRealPath("/images/brands/" + filename);
 					File file = new File(path);
 					image.transferTo(file);
-					brand.setLogo("/images/brands/" + brand.getName() + ".png");
+					brand.setLogo("/images/brands/" + filename);
 				} catch (Exception e) {
 				}
+			}
+		}
 
 		try {
 			brandService.update(brand);
