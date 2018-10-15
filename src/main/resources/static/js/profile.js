@@ -116,5 +116,8 @@ app.controller("profileController", function($scope, $http) {
 			alert("Lỗi server!");
 		});
 	}
+	
+	$scope.changePassword = function(){
+	}
 
 });

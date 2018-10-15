@@ -15,14 +15,11 @@
 					<div class="list-group" id="myList" role="tablist">
 						<a class="list-group-item list-group-item-action"
 							data-toggle="list" href="#profile" role="tab">Thông tin cá
-							nhân</a>
-						<a class="list-group-item list-group-item-action"
+							nhân</a> <a class="list-group-item list-group-item-action"
 							data-toggle="list" href="#change-password" role="tab">Đổi mật
-							khẩu</a>
-						<a class="list-group-item list-group-item-action"
-							data-toggle="list" href="#order-history" role="tab">
-							Lịch sử đơn hàng
-							<span class="badge badge-danger badge-pill">{{totalOrder}}</span>
+							khẩu</a> <a class="list-group-item list-group-item-action"
+							data-toggle="list" href="#order-history" role="tab"> Lịch sử
+							đơn hàng <span class="badge badge-danger badge-pill">{{totalOrder}}</span>
 						</a>
 					</div>
 				</div>
@@ -39,9 +36,8 @@
 							<table class="table table-sm table-bordered">
 								<tr>
 									<td>Họ và tên</td>
-									<td>
-										<input name="fullname" data-ng-model="user.fullname"
-											class="form-control form-control-sm" placeholder="Sửa tên">
+									<td><input name="fullname" data-ng-model="user.fullname"
+										class="form-control form-control-sm" placeholder="Sửa tên">
 									</td>
 									<td style="width: 30px">
 										<button data-ng-click="changeFullname(user)"
@@ -67,10 +63,9 @@
 								</tr>
 								<tr>
 									<td>Địa chỉ</td>
-									<td>
-										<textarea rows="3" class="form-control form-control-sm"
-											data-ng-model="user.address"></textarea>
-									</td>
+									<td><textarea rows="3"
+											class="form-control form-control-sm"
+											data-ng-model="user.address"></textarea></td>
 									<td style="width: 30px">
 										<button data-ng-click="changeAddress(user)"
 											class="btn btn-sm btn-warning">
@@ -80,11 +75,9 @@
 								</tr>
 								<tr>
 									<td>Giới tính</td>
-									<td>
-										<select data-ng-model="selectedGender"
-											data-ng-options="x.name for x in genders">
-										</select>
-									</td>
+									<td><select data-ng-model="selectedGender"
+										data-ng-options="x.name for x in genders">
+									</select></td>
 									<td style="width: 30px">
 										<button data-ng-click="changeGender(selectedGender)"
 											class="btn btn-sm btn-warning">
@@ -107,21 +100,43 @@
 								</ol>
 							</nav>
 
-							<form>
+							<form name="chgPwdForm">
 								<div class="form-group">
-									<label>Mật khẩu hiện tại</label>
-									<input type="password" name="password"
-										class="form-control form-control-sm">
+									<label>Mật khẩu hiện tại</label> <input type="password"
+										name="currentPassword" data-ng-model="currentPassword"
+										class="form-control form-control-sm" required>
+									<div
+										data-ng-show="chgPwdForm.currentPassword.$touched && 
+										chgPwdForm.currentPassword.$invalid">
+										<small class="text-danger">Vui lòng nhập mật khẩu hiện
+											tại</small>
+									</div>
 								</div>
 								<div class="form-group">
-									<label>Mật khẩu mới</label>
-									<input type="password" name="password"
-										class="form-control form-control-sm">
+									<label>Mật khẩu mới</label> <input type="password"
+										name="newPassword" data-ng-model="newPassword"
+										class="form-control form-control-sm" required>
+									<div
+										data-ng-show="chgPwdForm.newPassword.$touched && 
+										chgPwdForm.newPassword.$invalid">
+										<small class="text-danger">Vui lòng nhập mật khẩu hiện
+											mới</small>
+									</div>
 								</div>
 								<div class="form-group">
-									<label>Nhập lại mật khẩu mới</label>
-									<input type="password" name="password"
-										class="form-control form-control-sm">
+									<label>Nhập lại mật khẩu mới</label> <input type="password"
+										name="confirmNewPassword" data-ng-model="confirmNewPassword"
+										class="form-control form-control-sm" required>
+									<div
+										data-ng-show="chgPwdForm.confirmNewPassword.$touched && 
+										chgPwdForm.confirmNewPassword.$invalid">
+										<small class="text-danger">Vui lòng xác nhận lại mật
+											khẩu mới</small>
+									</div>
+								</div>
+								<div class="form-group">
+									<button data-ng-click="changePassword()"
+										class="btn btn-primary">Đổi mật khẩu</button>
 								</div>
 							</form>
 
